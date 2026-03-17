@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jigar & Rina — Reception Invitation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0e0e0e;
+    --gold: #c9a96e;
+    --gold-light: #e0c992;
+    --gold-dark: #8b6914;
+    --white: #f5f0eb;
+  }
+
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    opacity: 0;
+  }
+  body.ready { opacity: 1; }
+
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.25) 100%);
+    pointer-events: none; z-index: 1;
+  }
+
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .particle {
+    position: absolute; width: 3px; height: 3px;
+    background: var(--gold); border-radius: 50%; opacity: 0;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0%   { opacity: 0; transform: translateY(100vh) scale(0); }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+  }
+
+  .prompt {
+    position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+    color: var(--gold); font-size: 13px; letter-spacing: 3px;
+    text-transform: uppercase; opacity: 0; z-index: 20;
+  }
+
+  /* ── SEAL ── */
+  .seal-scene {
+    position: fixed; inset: 0; z-index: 60;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 20px;
+  }
+  .seal-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(27px, 6vw, 36px);
+    font-weight: 300; font-style: italic;
+    color: var(--gold); letter-spacing: 3px;
+    margin-bottom: 30px;
+    will-change: opacity;
+  }
+  .seal {
+    width: min(200px, 50vw); height: min(200px, 50vw);
+    border-radius: 50%; cursor: pointer; position: relative;
+    will-change: transform, opacity;
+  }
+  .seal:hover { cursor: pointer; }
+  .seal-glow {
+    position: absolute; inset: -30px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
+    z-index: 0;
+  }
+  .seal-outer {
+    position: absolute; inset: -8px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, var(--gold) 0%, var(--gold-dark) 100%);
+    filter: url(#wax-edge);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6), 0 0 40px rgba(201,169,110,0.2);
+  }
+  .seal-face {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 45%, var(--gold-dark) 100%);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    z-index: 2;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.25), inset 0 -3px 6px rgba(0,0,0,0.3);
+  }
+  .seal-face::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 1.5px solid rgba(14,14,14,0.2); }
+  .seal-face::after { content: ''; position: absolute; inset: 20px; border-radius: 50%; border: 1px solid rgba(14,14,14,0.12); }
+  .seal-monogram {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: min(44px, 11vw); font-weight: 600;
+    color: var(--bg); letter-spacing: 2px;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.15);
+    z-index: 3; line-height: 1;
+  }
+  .seal-monogram .amp { font-size: 0.5em; font-style: italic; font-weight: 300; margin: 0 4px; opacity: 0.7; }
+  .seal-subtitle {
+    font-family: 'Montserrat', sans-serif; font-size: min(7px, 1.8vw);
+    font-weight: 400; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--bg); opacity: 0.5; z-index: 3; margin-top: 3px;
+  }
+  .seal-dots { position: absolute; inset: 8px; border-radius: 50%; z-index: 2; }
+  .seal-dot { position: absolute; width: 3px; height: 3px; background: rgba(14,14,14,0.15); border-radius: 50%; }
+
+  .dust { position: absolute; border-radius: 50%; pointer-events: none; z-index: 10; }
+
+  /* ── BUTTERFLIES ── */
+  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 55; overflow: hidden; }
+  .butterfly { position: absolute; opacity: 0; }
+  .butterfly svg { width: 100%; height: 100%; }
+  .butterfly .wing-l { transform-origin: center right; animation: wingFlap 0.8s ease-in-out infinite alternate; }
+  .butterfly .wing-r { transform-origin: center left; animation: wingFlapR 0.8s ease-in-out infinite alternate; }
+  @keyframes wingFlap { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(55deg); } }
+  @keyframes wingFlapR { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(-55deg); } }
+
+  /* ── PETALS ── */
+  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 54; overflow: hidden; }
+  .petal {
+    position: absolute; opacity: 0;
+    border-radius: 50% 50% 50% 0;
+    background: linear-gradient(135deg, rgba(201,169,110,0.4), rgba(224,201,146,0.15));
+  }
+  @keyframes petalFall {
+    0%   { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(calc(100vh + 20px)) rotate(360deg) scale(0.8); }
+  }
+
+  /* ── REVEAL ── */
+  .reveal {
+    position: fixed; inset: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .reveal.active { pointer-events: auto; }
+  .reveal-stage { text-align: center; width: 100%; max-width: 520px; padding: 30px; }
+
+  .r-label, .r-names, .r-divider, .r-message, .r-date, .r-venue, .r-note {
+    opacity: 0; visibility: hidden;
+  }
+  .r-divider { transform: scaleX(0); }
+
+  .r-label {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 400;
+    letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+  }
+  .r-names {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(46px, 12vw, 76px); font-weight: 300;
+    color: var(--white); line-height: 1.2; margin-bottom: 5px;
+    padding: 5px 0;
+  }
+  .r-names .amp {
+    font-style: italic; color: var(--gold); font-size: 0.5em;
+    display: inline-block; margin: 0 10px;
+  }
+  .r-divider {
+    width: 100px; height: 1px; margin: 20px auto;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .r-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(15px, 3.5vw, 18px); font-weight: 300; font-style: italic;
+    color: var(--white); margin-bottom: 28px; line-height: 1.6;
+  }
+  .r-date { margin-bottom: 22px; }
+  .r-date .day {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 400;
+    letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+  }
+  .r-date .date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(26px, 6vw, 34px); font-weight: 300; color: var(--white); margin-bottom: 6px;
+  }
+  .r-date .time {
+    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 300;
+    letter-spacing: 3px; color: var(--gold);
+  }
+  .r-venue { margin-bottom: 22px; }
+  .r-venue .vname {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 4.5vw, 22px); font-weight: 400; color: var(--white); margin-bottom: 5px;
+  }
+  .r-venue .vaddr {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 300;
+    color: rgba(245,240,235,0.55); line-height: 1.8; letter-spacing: 0.5px;
+  }
+  .r-note {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 300;
+    letter-spacing: 2px; color: var(--gold); text-transform: uppercase;
+  }
+
+  .r-ornament { position: fixed; width: 70px; height: 70px; opacity: 0; pointer-events: none; }
+  .r-ornament svg { width: 100%; height: 100%; }
+  .r-ornament.tl { top: 15px; left: 15px; }
+  .r-ornament.tr { top: 15px; right: 15px; transform: scaleX(-1); }
+  .r-ornament.bl { bottom: 15px; left: 15px; transform: scaleY(-1); }
+  .r-ornament.br { bottom: 15px; right: 15px; transform: scale(-1,-1); }
+
+
+
+
+  /* ── Light rays ── */
+  .light-rays {
+    position: fixed; inset: 0; pointer-events: none; z-index: 49;
+    overflow: hidden; opacity: 0;
+  }
+  .light-ray {
+    position: absolute;
+    top: -20%;
+    width: 2px;
+    height: 140%;
+    background: linear-gradient(180deg, transparent, rgba(201,169,110,0.04), transparent);
+    transform-origin: top center;
+  }
+
+  /* ── RSVP ── */
+  .rsvp-overlay {
+    position: fixed; inset: 0; z-index: 200; background: var(--bg);
+    transform: translateX(100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .rsvp-content {
+    text-align: center; max-width: 520px; width: 100%;
+    padding: 50px 40px;
+    background: linear-gradient(160deg, rgba(22,20,18,0.95), rgba(16,14,12,0.98));
+    border: 1px solid rgba(201,169,110,0.15);
+    border-radius: 4px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(201,169,110,0.05);
+    position: relative;
+  }
+  .rsvp-content::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1px solid rgba(201,169,110,0.07);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .rsvp-title {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 400;
+    letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; opacity: 0;
+  }
+  .rsvp-subtitle {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300;
+    font-style: italic; color: var(--white); margin-bottom: 35px; opacity: 0;
+  }
+  .rsvp-divider {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 35px; opacity: 0;
+  }
+  .rsvp-form {
+    display: flex; flex-direction: column; gap: 14px;
+    max-width: 320px; margin: 0 auto; opacity: 0;
+  }
+  .rsvp-input {
+    background: transparent; border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 2px; padding: 12px 16px;
+    font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 300;
+    color: var(--white); letter-spacing: 0.5px; outline: none;
+    transition: border-color 0.3s ease;
+  }
+  .rsvp-input:focus { border-color: var(--gold); }
+  .rsvp-input::placeholder { color: rgba(245,240,235,0.3); }
+  .rsvp-textarea { resize: none; height: 80px; }
+  .rsvp-attendance { display: flex; gap: 20px; justify-content: center; }
+  .rsvp-radio { cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .rsvp-radio input[type="radio"] {
+    appearance: none; width: 14px; height: 14px;
+    border: 1px solid rgba(201,169,110,0.4); border-radius: 50%;
+    cursor: pointer; position: relative; transition: border-color 0.3s ease;
+  }
+  .rsvp-radio input[type="radio"]:checked { border-color: var(--gold); }
+  .rsvp-radio input[type="radio"]:checked::after {
+    content: ''; position: absolute; inset: 3px; background: var(--gold); border-radius: 50%;
+  }
+  .radio-label { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 300; color: var(--white); letter-spacing: 0.5px; }
+  .rsvp-button {
+    background: transparent; border: 1px solid var(--gold); color: var(--gold);
+    padding: 12px 24px; font-family: 'Montserrat', sans-serif; font-size: 11px;
+    font-weight: 400; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s ease, color 0.3s ease; margin-top: 6px;
+  }
+  .rsvp-button:hover { background: var(--gold); color: var(--bg); }
+  .rsvp-success {
+    display: none; font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic; color: var(--gold); margin-top: 20px;
+  }
+  .rsvp-success.show { display: block; }
+
+  @media (max-width: 480px) {
+    .r-ornament { width: 45px; height: 45px; }
+    .reveal-stage { padding: 20px; }
+    .light-rays { display: none; }
+    .rsvp-content { margin: 0 20px; padding: 40px 25px; }
+  }
+</style>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="wax-edge">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" seed="2"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+<div class="prompt" id="prompt">Tap the seal</div>
+
+<div class="seal-scene" id="sealScene">
+  <div class="seal-heading" id="sealHeading">You're Invited!</div>
+  <div class="seal" id="seal">
+    <div class="seal-glow" id="sealGlow"></div>
+    <div class="seal-outer"></div>
+    <div class="seal-face">
+      <div class="seal-dots" id="sealDots"></div>
+      <img src="m (4).png" alt="J & R" style="width:65%;height:auto;filter:invert(0) brightness(0.1);z-index:3;position:relative;">
+    </div>
+  </div>
+</div>
+
+<div class="dissolve-dust" id="dissolveDust" style="position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden;"></div>
+<div class="light-rays" id="lightRays"></div>
+<div class="butterflies" id="butterflies"></div>
+<div class="petals" id="petals"></div>
+
+<div class="reveal" id="reveal">
+  <div class="r-ornament tl" id="ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+  <div class="r-ornament tr" id="ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+  <div class="r-ornament bl" id="ornBL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+  <div class="r-ornament br" id="ornBR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+
+  <div class="reveal-stage">
+    <div class="r-label" id="rLabel">Reception Invitation</div>
+    <div class="r-names" id="rNames">Jigar <span class="amp">&</span> Rina</div>
+    <div class="r-divider" id="rDivider"></div>
+    <div class="r-message" id="rMessage">Your presence will make our special day even more meaningful.</div>
+    <div class="r-date" id="rDate">
+      <div class="day">Thursday</div>
+      <div class="date">4th June 2026</div>
+      <div class="time">at 6:30pm</div>
+    </div>
+    <div class="r-venue" id="rVenue">
+      <div class="vname">Froyle Park</div>
+      <div class="vaddr">Ryebridge Lane<br>Upper Froyle, Alton<br>Hampshire GU34 4LA</div>
+    </div>
+    <div class="r-note" id="rNote">We kindly request no boxed gifts</div>
+  </div>
+</div>
+
+<div class="rsvp-overlay" id="rsvpOverlay">
+  <div class="rsvp-content">
+    <div class="rsvp-title" id="rsvpTitle">RSVP</div>
+    <div class="rsvp-subtitle" id="rsvpSub">We would love to hear from you</div>
+    <div class="rsvp-divider" id="rsvpDiv"></div>
+    <form class="rsvp-form" id="rsvpForm" onsubmit="submitRsvp(event)">
+      <input type="text" class="rsvp-input" id="rsvpName" placeholder="Your full name" required>
+      <div class="rsvp-attendance">
+        <label class="rsvp-radio"><input type="radio" name="attending" value="yes" required><span class="radio-label">Joyfully Accepts</span></label>
+        <label class="rsvp-radio"><input type="radio" name="attending" value="no"><span class="radio-label">Respectfully Declines</span></label>
+      </div>
+      <input type="number" class="rsvp-input" id="rsvpGuests" placeholder="Number of guests" min="1" max="10">
+      <textarea class="rsvp-input rsvp-textarea" id="rsvpMessage" placeholder="Dietary requirements or message (optional)"></textarea>
+      <button type="submit" class="rsvp-button">Send Response</button>
+    </form>
+    <div class="rsvp-success" id="rsvpSuccess">Thank you for your response.</div>
+  </div>
+</div>
+
+<script>
+  // Body starts hidden — reveal only after GSAP has set initial states
+  document.body.classList.add('ready');
+
+  // ── Particles ──
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 2) + 's';
+    p.style.width = p.style.height = (1.5 + Math.random() * 2.5) + 'px';
+    pc.appendChild(p);
+  }
+
+  // ── Seal dots ──
+  const dots = document.getElementById('sealDots');
+  for (let i = 0; i < 24; i++) {
+    const d = document.createElement('div');
+    d.className = 'seal-dot';
+    const a = (i / 24) * Math.PI * 2;
+    d.style.left = (50 + Math.cos(a) * 44) + '%';
+    d.style.top = (50 + Math.sin(a) * 44) + '%';
+    d.style.transform = 'translate(-50%,-50%)';
+    dots.appendChild(d);
+  }
+
+  // ── Audio ──
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+
+  function playWaxCrack() {
+    const ctx = getAudioCtx();
+    const dur = 0.35;
+    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-(i / data.length) * 12) * 0.7;
+    }
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2200; bp.Q.value = 0.7;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.5, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    src.connect(bp); bp.connect(g); g.connect(ctx.destination); src.start();
+  }
+
+  // ── Music ──
+  let musicStarted = false;
+  const bgMusic = new Audio('Lana Del Rey - Young and Beautiful (Official Instrumental) - (320 Kbps).mp3');
+  bgMusic.loop = true; bgMusic.volume = 0;
+
+  function startMusic() {
+    if (musicStarted) return;
+    musicStarted = true;
+    bgMusic.play().then(() => {
+      gsap.to(bgMusic, { volume: 0.35, duration: 4, ease: 'power1.in' });
+    }).catch(() => {});
+  }
+
+  // ── RSVP ──
+  function submitRsvp(e) {
+    e.preventDefault();
+    document.getElementById('rsvpForm').style.display = 'none';
+    document.getElementById('rsvpSuccess').classList.add('show');
+  }
+
+  // ── Butterflies ──
+  function createButterflySVG(hue, opacity) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 40 40');
+    svg.setAttribute('fill', 'none');
+    svg.style.overflow = 'visible';
+    const wingL = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    wingL.classList.add('wing-l');
+    const pathL = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pathL.setAttribute('d', 'M20 20 C15 10, 5 5, 2 15 C0 22, 8 28, 20 20Z');
+    pathL.setAttribute('fill', hue); pathL.setAttribute('opacity', String(opacity));
+    wingL.appendChild(pathL);
+    const wingR = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    wingR.classList.add('wing-r');
+    const pathR = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pathR.setAttribute('d', 'M20 20 C25 10, 35 5, 38 15 C40 22, 32 28, 20 20Z');
+    pathR.setAttribute('fill', hue); pathR.setAttribute('opacity', String(opacity));
+    wingR.appendChild(pathR);
+    const body = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+    body.setAttribute('cx', '20'); body.setAttribute('cy', '20');
+    body.setAttribute('rx', '0.8'); body.setAttribute('ry', '3');
+    body.setAttribute('fill', hue); body.setAttribute('opacity', String(opacity + 0.1));
+    svg.appendChild(wingL); svg.appendChild(wingR); svg.appendChild(body);
+    return svg;
+  }
+
+  function spawnButterflies() {
+    const container = document.getElementById('butterflies');
+    for (let i = 0; i < 5; i++) {
+      const b = document.createElement('div');
+      b.className = 'butterfly';
+      const size = 45 + Math.random() * 35;
+      b.style.width = size + 'px'; b.style.height = size + 'px';
+      const hue = Math.random() > 0.5 ? '#c9a96e' : '#e0c992';
+      b.appendChild(createButterflySVG(hue, 0.25 + Math.random() * 0.2));
+      const wL = b.querySelector('.wing-l'); const wR = b.querySelector('.wing-r');
+      if (wL) wL.style.animationDuration = (0.6 + Math.random() * 0.5) + 's';
+      if (wR) wR.style.animationDuration = (0.6 + Math.random() * 0.5) + 's';
+      container.appendChild(b);
+
+      const startX = Math.random() * window.innerWidth;
+      const startY = window.innerHeight * (0.2 + Math.random() * 0.6);
+      gsap.fromTo(b,
+        { left: startX, top: startY, opacity: 0, rotation: -10 },
+        { left: startX + (Math.random()-0.5)*400, top: startY - 100 - Math.random()*200,
+          opacity: 0.8, rotation: 5, duration: 6+Math.random()*6,
+          delay: 1+i*1.5+Math.random()*2, ease: 'sine.inOut',
+          onComplete: function() { gsap.to(b, {opacity:0, duration:2}); }
+        }
+      );
+    }
+  }
+
+  function spawnPetals() {
+    const container = document.getElementById('petals');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div'); p.className = 'petal';
+      const size = 8 + Math.random() * 10;
+      p.style.width = size + 'px'; p.style.height = (size*1.4) + 'px';
+      p.style.left = Math.random()*100 + '%';
+      p.style.borderRadius = Math.random() > 0.5 ? '50% 50% 50% 0' : '50% 0 50% 50%';
+      const colors = [
+        'linear-gradient(135deg, rgba(201,169,110,0.35), rgba(224,201,146,0.1))',
+        'linear-gradient(135deg, rgba(224,201,146,0.3), rgba(201,169,110,0.08))',
+      ];
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animation = 'petalFall '+(8000+Math.random()*8000)+'ms linear '+(Math.random()*10000)+'ms infinite';
+      container.appendChild(p);
+    }
+  }
+
+  // ── Dissolve dust — particles burst from seal center outward ──
+  function spawnDissolveDust() {
+    const container = document.getElementById('dissolveDust');
+    const seal = document.getElementById('seal');
+    const rect = seal.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 60; i++) {
+      const p = document.createElement('div');
+      p.style.position = 'absolute';
+      p.style.borderRadius = '50%';
+      const sz = 2 + Math.random() * 4;
+      p.style.width = sz + 'px';
+      p.style.height = sz + 'px';
+      p.style.left = cx + 'px';
+      p.style.top = cy + 'px';
+      const colors = ['#e0c992', '#c9a96e', '#d4b878', '#f0dca8'];
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.boxShadow = '0 0 ' + (2 + Math.random() * 3) + 'px rgba(201,169,110,0.4)';
+      container.appendChild(p);
+
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 80 + Math.random() * 250;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist - Math.random() * 60;
+
+      gsap.fromTo(p,
+        { x: 0, y: 0, opacity: 0, scale: 0.5 },
+        {
+          x: dx, y: dy, opacity: 0, scale: 0,
+          duration: 1.5 + Math.random() * 1,
+          delay: Math.random() * 0.8,
+          ease: 'power2.out',
+          keyframes: [
+            { opacity: 0.8, scale: 1, duration: 0.2 },
+            { opacity: 0, scale: 0, duration: 1.3 + Math.random() * 0.7 }
+          ],
+          onComplete: function() { p.remove(); }
+        }
+      );
+    }
+  }
+
+  // ── Light rays ──
+  function createLightRays() {
+    const container = document.getElementById('lightRays');
+    for (let i = 0; i < 6; i++) {
+      const ray = document.createElement('div');
+      ray.className = 'light-ray';
+      ray.style.left = (15 + i * 14) + '%';
+      ray.style.transform = 'rotate(' + (-20 + i * 8) + 'deg)';
+      ray.style.width = (1 + Math.random() * 2) + 'px';
+      container.appendChild(ray);
+    }
+  }
+  createLightRays();
+
+  // ══════════════════════════════════════════
+  // INTRO TIMELINE — seal entrance with GSAP
+  // ══════════════════════════════════════════
+  // GSAP owns all initial states — no CSS opacity/transform conflicts
+  gsap.set('#sealHeading', { opacity: 0 });
+  gsap.set('#seal', { opacity: 0, scale: 0.5 });
+  gsap.set('#prompt', { opacity: 0 });
+  gsap.set('#sealGlow', { scale: 1, opacity: 0.6 });
+  gsap.set('#sealScene', { opacity: 1 });
+
+  const introTL = gsap.timeline({ delay: 0.3 });
+  introTL
+    .to('#sealHeading', { opacity: 1, duration: 1.5, ease: 'power2.out' }, 0)
+    .to('#seal', { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.4)' }, 0.3)
+    .to('#prompt', { opacity: 0.7, duration: 1, ease: 'power1.out' }, 1.5)
+    .to('#prompt', { opacity: 0.4, duration: 1.5, ease: 'sine.inOut', repeat: -1, yoyo: true }, 2)
+    .to('#sealGlow', { scale: 1.08, opacity: 1, duration: 1.5, ease: 'sine.inOut', repeat: -1, yoyo: true }, 0.5);
+
+  // ══════════════════════════════════════════
+  // CRACK SEAL — dissolve + reveal timeline
+  // ══════════════════════════════════════════
+  let opened = false;
+
+  document.getElementById('seal').addEventListener('click', function() {
+    if (opened) return;
+    opened = true;
+
+    // Freeze current state then stop intro — don't revert styles
+    gsap.set('#seal', { opacity: 1, scale: 1, clearProps: '' });
+    gsap.set('#sealHeading', { opacity: 1 });
+    gsap.set('#sealGlow', { clearProps: '' });
+    introTL.pause();
+    introTL.kill();
+
+    // chime disabled for now
+    // const chime = new Audio('chime.mp3');
+    // chime.volume = 0.25;
+    // chime.play().catch(() => {});
+
+    // One unified GSAP timeline for the entire dissolve → reveal
+    const tl = gsap.timeline();
+
+    // ── PHASE 1: Seal breaks into particles → butterflies emerge ──
+    tl.to('#sealHeading', { opacity: 0, duration: 0.8, ease: 'power2.in' }, 0)
+      .to('#prompt', { opacity: 0, duration: 0.5, ease: 'power2.in' }, 0)
+
+      // Particles burst from seal immediately
+      .call(() => spawnDissolveDust(), null, 0.05)
+
+      // Seal simply fades — no filters, no brightness, just clean opacity
+      .to('#sealGlow', { scale: 2, opacity: 0, duration: 1.5, ease: 'power1.out' }, 0)
+      .to('#seal', { opacity: 0, scale: 1.05, duration: 1.8, ease: 'power1.in' }, 0.3)
+
+      .call(() => startMusic(), null, 0.8)
+
+      .set('#sealScene', { display: 'none' }, 2.5)
+
+    // ── PHASE 2: Light rays + reveal + butterflies ──
+      .to('#lightRays', { opacity: 1, duration: 2, ease: 'power1.out' }, 2)
+      .call(() => {
+        document.getElementById('reveal').classList.add('active');
+        spawnButterflies();
+        spawnPetals();
+      }, null, 2.3)
+
+      .set('#rLabel', { visibility: 'visible' }, 2.5)
+      .fromTo('#rLabel', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 2.5)
+
+      // Names with shimmer effect
+      .set('#rNames', { visibility: 'visible' }, 3.3)
+      .fromTo('#rNames', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 1.4, ease: 'power3.out' }, 3.3)
+      .set('#rDivider', { visibility: 'visible' }, 4.5)
+      .fromTo('#rDivider', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1.2, ease: 'power2.out' }, 4.5)
+
+      .set('#rMessage', { visibility: 'visible' }, 5)
+      .fromTo('#rMessage', { opacity: 0 }, { opacity: 0.85, duration: 1.8, ease: 'power1.out' }, 5)
+
+      .set('#rDate', { visibility: 'visible' }, 6.2)
+      .fromTo('#rDate', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 6.2)
+
+      .set('#rVenue', { visibility: 'visible' }, 6.5)
+      .fromTo('#rVenue', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 6.5)
+
+      .set('#rNote', { visibility: 'visible' }, 7)
+      .fromTo('#rNote', { opacity: 0 }, { opacity: 0.6, duration: 1.2, ease: 'power1.out' }, 7)
+
+      .to(['#ornTL','#ornTR','#ornBL','#ornBR'], { opacity: 1, duration: 1.2, ease: 'power1.out' }, 7.4)
+
+      // Light rays slowly fade out after everything settles
+      .to('#lightRays', { opacity: 0, duration: 3, ease: 'power1.in' }, 9)
+
+    // ── PHASE 3: RSVP ──
+      .to('#rsvpOverlay', { x: 0, duration: 1.2, ease: 'power3.inOut' }, 15)
+      .fromTo('#rsvpTitle', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 15.4)
+      .fromTo('#rsvpSub', { opacity: 0, y: 20 }, { opacity: 0.7, y: 0, duration: 0.8, ease: 'power3.out' }, 15.6)
+      .fromTo('#rsvpDiv', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 15.7)
+      .fromTo('#rsvpForm', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 15.8);
+  });
+</script>
+</body>
+</html>
