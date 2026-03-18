@@ -33,10 +33,15 @@
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     pointer-events: none; z-index: 0;
   }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(140,46,46,0.08) 70%, rgba(80,20,20,0.15) 100%);
+    pointer-events: none; z-index: 1;
+  }
 
   /* Particles */
-  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  .particle { position: absolute; width: 3px; height: 3px; background: var(--rose); border-radius: 50%; opacity: 0; animation: float linear infinite; }
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+  .particle { position: absolute; width: 3px; height: 3px; background: var(--green); border-radius: 50%; opacity: 0; animation: float linear infinite; }
   @keyframes float { 0% { opacity:0; transform:translateY(100vh) scale(0); } 10% { opacity:0.6; } 90% { opacity:0.2; } 100% { opacity:0; transform:translateY(-10vh) scale(1); } }
 
   .prompt { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); color: var(--green); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; opacity: 0; z-index: 20; }
@@ -67,11 +72,12 @@
 
   /* Petals */
   .petals { position: fixed; inset: 0; pointer-events: none; z-index: 54; overflow: hidden; }
+  .particles { overflow: hidden; }
   .petal { position: absolute; opacity: 0; border-radius: 50% 50% 50% 0; }
   @keyframes petalFall {
     0%   { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
-    10%  { opacity: 0.7; }
-    90%  { opacity: 0.3; }
+    10%  { opacity: 0.45; }
+    90%  { opacity: 0.15; }
     100% { opacity: 0; transform: translateY(calc(100vh + 20px)) rotate(360deg) scale(0.8); }
   }
 
@@ -214,10 +220,10 @@
     <!-- PAGE 1: Wedding (white) -->
     <div class="page page-wedding">
       <div class="page-texture"></div>
-      <div class="page-orn tl" id="w-ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
-      <div class="page-orn tr" id="w-ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
-      <div class="page-orn bl" id="w-ornBL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
-      <div class="page-orn br" id="w-ornBR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
+      <div class="page-orn tl" id="w-ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="1" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.8" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#8c2e2e" opacity="0.4"/></svg></div>
+      <div class="page-orn tr" id="w-ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="1" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.8" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#8c2e2e" opacity="0.4"/></svg></div>
+      <div class="page-orn bl" id="w-ornBL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="1" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.8" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#8c2e2e" opacity="0.4"/></svg></div>
+      <div class="page-orn br" id="w-ornBR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="1" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.8" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#8c2e2e" opacity="0.4"/></svg></div>
       <div class="inv">
         <div class="inv-label" id="w-label">Wedding Invitation</div>
         <div class="inv-names" id="w-names">Jigar <span class="amp">&</span> Rina</div>
@@ -425,6 +431,14 @@
     });
     const dotsEl = document.getElementById('pageDots');
     dotsEl.classList.toggle('on-wedding', n === 0);
+    // Hide butterflies/petals on RSVP page, show on invitation pages
+    if (n === 2) {
+      gsap.to('#butterflies', { opacity: 0, duration: 0.5 });
+      gsap.to('#petals', { opacity: 0, duration: 0.5 });
+    } else {
+      gsap.to('#butterflies', { opacity: 1, duration: 0.5 });
+      gsap.to('#petals', { opacity: 1, duration: 0.5 });
+    }
     // Trigger reveal for new page if not done
     if (n === 1 && !revealDone[1]) { revealDone[1] = true; revealReception(); }
     if (n === 2 && !revealDone[2]) { revealDone[2] = true; revealRSVP(); }
