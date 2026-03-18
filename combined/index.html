@@ -3,98 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jigar & Rina — Wedding & Reception Invitation</title>
+<title>Jigar & Rina — Wedding & Reception</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #faf8f5;
-    --card: #ffffff;
-    --green: #6b7c5e;
-    --green-light: #8fa67a;
-    --green-dark: #4a5a3e;
+    --bg: #0e0e0e;
+    --gold: #c9a96e;
+    --gold-light: #e0c992;
+    --gold-dark: #8b6914;
+    --white: #f5f0eb;
+    --green: #8c2e2e;
     --rose: #c4917b;
-    --rose-light: #d4a897;
-    --text: #3a3632;
-    --text-light: #7a746e;
-    --cream: #f3efe8;
   }
 
   body {
-    background: var(--bg);
+    background: #faf8f5;
     min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Montserrat', sans-serif;
-    overflow: hidden;
-    opacity: 0;
+    overflow: hidden; opacity: 0;
   }
   body.ready { opacity: 1; }
 
-  /* ── Floating petals (floral) ── */
-  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .petal {
-    position: absolute; opacity: 0;
-    border-radius: 50% 50% 50% 0;
-  }
-  @keyframes petalFall {
-    0%   { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
-    10%  { opacity: 0.5; }
-    90%  { opacity: 0.15; }
-    100% { opacity: 0; transform: translateY(calc(100vh + 20px)) rotate(360deg) scale(0.8); }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
   }
 
-  /* ── Prompt ── */
-  .prompt {
-    position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-    color: var(--green); font-size: 13px; letter-spacing: 3px;
-    text-transform: uppercase; opacity: 0; z-index: 20;
-  }
+  /* Particles */
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .particle { position: absolute; width: 3px; height: 3px; background: var(--rose); border-radius: 50%; opacity: 0; animation: float linear infinite; }
+  @keyframes float { 0% { opacity:0; transform:translateY(100vh) scale(0); } 10% { opacity:0.6; } 90% { opacity:0.2; } 100% { opacity:0; transform:translateY(-10vh) scale(1); } }
 
-  /* ── SEAL (green/floral wax) ── */
-  .seal-scene {
-    position: fixed; inset: 0; z-index: 60;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 20px;
-  }
-  .seal-heading {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(27px, 6vw, 36px);
-    font-weight: 300; font-style: italic;
-    color: var(--green); letter-spacing: 3px;
-    margin-bottom: 30px;
-  }
-  .seal {
-    width: min(200px, 50vw); height: min(200px, 50vw);
-    border-radius: 50%; cursor: pointer; position: relative;
-  }
-  .seal-glow {
-    position: absolute; inset: -30px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(107,124,94,0.08) 0%, transparent 70%);
-    z-index: 0;
-  }
-  .seal-outer {
-    position: absolute; inset: -8px; border-radius: 50%;
-    background: radial-gradient(circle at 40% 35%, var(--green-light) 0%, var(--green-dark) 100%);
-    filter: url(#wax-edge);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 0 40px rgba(107,124,94,0.15);
-  }
-  .seal-face {
-    position: absolute; inset: 0; border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #a3b893, var(--green) 45%, var(--green-dark) 100%);
-    display: flex; align-items: center; justify-content: center; flex-direction: column;
-    z-index: 2;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -3px 6px rgba(0,0,0,0.15);
-  }
-  .seal-face::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.15); }
-  .seal-face::after { content: ''; position: absolute; inset: 20px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08); }
+  .prompt { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); color: var(--green); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; opacity: 0; z-index: 20; }
 
-  .dust { position: absolute; border-radius: 50%; pointer-events: none; z-index: 10; }
+  /* ── SEAL ── */
+  .seal-scene { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+  .seal-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(27px,6vw,36px); font-weight: 300; font-style: italic; color: var(--green); letter-spacing: 3px; margin-bottom: 30px; }
+  .seal { width: min(200px,50vw); height: min(200px,50vw); border-radius: 50%; cursor: pointer; position: relative; }
+  .seal-glow { position: absolute; inset: -30px; border-radius: 50%; background: radial-gradient(circle, rgba(140,46,46,0.08) 0%, transparent 70%); z-index: 0; }
+  .seal-outer { position: absolute; inset: -8px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #c44040 0%, #5a1a1a 100%); filter: url(#wax-edge); box-shadow: 0 4px 20px rgba(0,0,0,0.15), 0 0 40px rgba(140,46,46,0.15); }
+  .seal-face { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #c44040, var(--green) 45%, #5a1a1a 100%); display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), inset 0 -3px 6px rgba(0,0,0,0.15); }
+  .seal-face::before { content: ''; position: absolute; inset: 14px; border-radius: 50%; border: 1.5px solid rgba(14,14,14,0.2); }
+  .seal-face::after { content: ''; position: absolute; inset: 20px; border-radius: 50%; border: 1px solid rgba(14,14,14,0.12); }
+  .seal-dots { position: absolute; inset: 8px; border-radius: 50%; z-index: 2; }
+  .seal-dot { position: absolute; width: 3px; height: 3px; background: rgba(14,14,14,0.15); border-radius: 50%; }
 
-  /* ── Butterflies ── */
-  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 55; overflow: hidden; }
+  /* Dissolve dust */
+  .dissolve-dust { position: fixed; inset: 0; pointer-events: none; z-index: 55; overflow: hidden; }
+
+  /* Butterflies */
+  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 56; overflow: hidden; }
   .butterfly { position: absolute; opacity: 0; }
   .butterfly svg { width: 100%; height: 100%; }
   .butterfly .wing-l { transform-origin: center right; animation: wingFlap 0.8s ease-in-out infinite alternate; }
@@ -102,165 +65,125 @@
   @keyframes wingFlap { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(55deg); } }
   @keyframes wingFlapR { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(-55deg); } }
 
-  /* ── REVEAL ── */
-  .reveal {
-    position: fixed; inset: 0; z-index: 50;
-    display: flex; align-items: center; justify-content: center;
-    pointer-events: none;
-  }
-  .reveal.active { pointer-events: auto; }
-  .reveal-stage { text-align: center; width: 100%; max-width: 520px; padding: 30px; }
-
-  .r-label, .r-names, .r-divider, .r-message, .r-date, .r-venue, .r-note {
-    opacity: 0; visibility: hidden;
-  }
-  .r-divider { transform: scaleX(0); }
-
-  .r-label {
-    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 400;
-    letter-spacing: 5px; text-transform: uppercase; color: var(--green); margin-bottom: 20px;
-  }
-  .r-names {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(46px, 12vw, 76px); font-weight: 300;
-    color: var(--text); line-height: 1.2; margin-bottom: 5px; padding: 5px 0;
-  }
-  .r-names .amp {
-    font-style: italic; color: var(--rose); font-size: 0.5em;
-    display: inline-block; margin: 0 10px;
-  }
-  .r-divider {
-    width: 100px; height: 1px; margin: 20px auto;
-    background: linear-gradient(90deg, transparent, var(--rose), transparent);
-  }
-  .r-message {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(15px, 3.5vw, 18px); font-weight: 300; font-style: italic;
-    color: var(--text); margin-bottom: 28px; line-height: 1.6;
-  }
-  .r-date { margin-bottom: 22px; }
-  .r-date .day {
-    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 400;
-    letter-spacing: 4px; text-transform: uppercase; color: var(--green); margin-bottom: 6px;
-  }
-  .r-date .date {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(26px, 6vw, 34px); font-weight: 300; color: var(--text); margin-bottom: 6px;
-  }
-  .r-date .time {
-    font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 300;
-    letter-spacing: 3px; color: var(--green);
-  }
-  .r-venue { margin-bottom: 22px; }
-  .r-venue .vname {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(18px, 4.5vw, 22px); font-weight: 400; color: var(--text); margin-bottom: 5px;
-  }
-  .r-venue .vaddr {
-    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 300;
-    color: var(--text-light); line-height: 1.8; letter-spacing: 0.5px;
-  }
-  .r-note {
-    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 300;
-    letter-spacing: 2px; color: var(--green); text-transform: uppercase;
+  /* Petals */
+  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 54; overflow: hidden; }
+  .petal { position: absolute; opacity: 0; border-radius: 50% 50% 50% 0; }
+  @keyframes petalFall {
+    0%   { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(calc(100vh + 20px)) rotate(360deg) scale(0.8); }
   }
 
-  .r-ornament { position: fixed; width: 70px; height: 70px; opacity: 0; pointer-events: none; }
-  .r-ornament svg { width: 100%; height: 100%; }
-  .r-ornament.tl { top: 15px; left: 15px; }
-  .r-ornament.tr { top: 15px; right: 15px; transform: scaleX(-1); }
-  .r-ornament.bl { bottom: 15px; left: 15px; transform: scaleY(-1); }
-  .r-ornament.br { bottom: 15px; right: 15px; transform: scale(-1,-1); }
+  /* ── SWIPE PAGES ── */
+  .pages-container { position: fixed; inset: 0; z-index: 50; overflow: hidden; opacity: 0; pointer-events: none; }
+  .pages-container.active { opacity: 1; pointer-events: auto; }
+  .pages-track { display: flex; width: 300vw; height: 100vh; }
 
-  /* ── RSVP ── */
-  .rsvp-overlay {
-    position: fixed; inset: 0; z-index: 200; background: var(--bg);
-    transform: translateX(100%);
-    display: flex; align-items: center; justify-content: center;
+  /* Dot indicator */
+  .page-dots {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 200; opacity: 0;
   }
-  .rsvp-content {
-    text-align: center; max-width: 520px; width: 100%;
-    padding: 50px 40px;
-    background: var(--card);
-    border: 1px solid rgba(107,124,94,0.15);
-    border-radius: 4px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
-    position: relative;
+  .page-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(201,169,110,0.25);
+    transition: background 0.4s ease, transform 0.4s ease;
   }
-  .rsvp-content::before {
-    content: ''; position: absolute; inset: 8px;
-    border: 1px solid rgba(107,124,94,0.07);
-    border-radius: 2px; pointer-events: none;
+  .page-dot.active {
+    background: var(--gold);
+    transform: scale(1.3);
   }
-  .rsvp-title {
-    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 400;
-    letter-spacing: 5px; text-transform: uppercase; color: var(--green); margin-bottom: 10px; opacity: 0;
-  }
-  .rsvp-subtitle {
-    font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300;
-    font-style: italic; color: var(--text); margin-bottom: 35px; opacity: 0;
-  }
-  .rsvp-divider {
-    width: 60px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--rose), transparent);
-    margin: 0 auto 35px; opacity: 0;
-  }
-  .rsvp-form {
-    display: flex; flex-direction: column; gap: 14px;
-    max-width: 320px; margin: 0 auto; opacity: 0;
-  }
-  .rsvp-input {
-    background: transparent; border: 1px solid rgba(107,124,94,0.2);
-    border-radius: 2px; padding: 12px 16px;
-    font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 300;
-    color: var(--text); letter-spacing: 0.5px; outline: none;
-    transition: border-color 0.3s ease;
-  }
-  .rsvp-input:focus { border-color: var(--green); }
-  .rsvp-input::placeholder { color: var(--text-light); opacity: 0.5; }
+  /* White dots on wedding page */
+  .page-dots.on-wedding .page-dot { background: rgba(140,46,46,0.2); }
+  .page-dots.on-wedding .page-dot.active { background: var(--green); }
+
+  .page { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+
+  /* Page ornaments */
+  .page-orn { position: absolute; width: 70px; height: 70px; opacity: 0; pointer-events: none; }
+  .page-orn svg { width: 100%; height: 100%; }
+  .page-orn.tl { top: 15px; left: 15px; }
+  .page-orn.tr { top: 15px; right: 15px; transform: scaleX(-1); }
+  .page-orn.bl { bottom: 15px; left: 15px; transform: scaleY(-1); }
+  .page-orn.br { bottom: 15px; right: 15px; transform: scale(-1,-1); }
+
+  /* Page texture overlay */
+  .page-texture { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E"); pointer-events: none; }
+
+  /* Page 1: Wedding (white) */
+  .page-wedding { background: #faf8f5; }
+  .page-wedding .inv { text-align: center; max-width: 520px; padding: 30px; }
+  .page-wedding .inv-label { font-size: 10px; font-weight: 400; letter-spacing: 5px; text-transform: uppercase; color: var(--green); margin-bottom: 20px; opacity: 0; visibility: hidden; }
+  .page-wedding .inv-names { font-family: 'Cormorant Garamond', serif; font-size: clamp(42px,10vw,68px); font-weight: 300; color: #3a3632; line-height: 1.2; padding: 5px 0; margin-bottom: 5px; opacity: 0; visibility: hidden; }
+  .page-wedding .inv-names .amp { font-style: italic; color: var(--rose); font-size: 0.5em; display: inline-block; margin: 0 8px; }
+  .page-wedding .inv-divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--rose), transparent); margin: 20px auto; opacity: 0; visibility: hidden; transform: scaleX(0); }
+  .page-wedding .inv-message { font-family: 'Cormorant Garamond', serif; font-size: clamp(15px,3.5vw,18px); font-weight: 300; font-style: italic; color: #3a3632; margin-bottom: 25px; line-height: 1.6; opacity: 0; visibility: hidden; }
+  .page-wedding .inv-date { margin-bottom: 20px; opacity: 0; visibility: hidden; }
+  .page-wedding .inv-date .day { font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+  .page-wedding .inv-date .date { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px,5vw,30px); font-weight: 300; color: #3a3632; margin-bottom: 6px; }
+  .page-wedding .inv-date .time { font-size: 12px; font-weight: 300; letter-spacing: 3px; color: var(--green); }
+  .page-wedding .inv-venue { margin-bottom: 20px; opacity: 0; visibility: hidden; }
+  .page-wedding .inv-venue .vname { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px,4vw,22px); font-weight: 400; color: #3a3632; margin-bottom: 5px; }
+  .page-wedding .inv-venue .vaddr { font-size: 11px; font-weight: 300; color: #7a746e; line-height: 1.8; letter-spacing: 0.5px; }
+  .page-wedding .inv-dress { margin-bottom: 18px; opacity: 0; visibility: hidden; }
+  .page-wedding .inv-dress .dtitle { font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+  .page-wedding .inv-dress .dval { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 300; color: #3a3632; }
+  .page-wedding .inv-note { font-size: 10px; font-weight: 300; letter-spacing: 2px; color: var(--green); text-transform: uppercase; opacity: 0; visibility: hidden; }
+
+  /* Page 2: Reception (dark) */
+  .page-reception { background: var(--bg); }
+  .page-reception .inv { text-align: center; max-width: 520px; padding: 30px; }
+  .page-reception .inv-label { font-size: 10px; font-weight: 400; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; opacity: 0; }
+  .page-reception .inv-names { font-family: 'Cormorant Garamond', serif; font-size: clamp(42px,10vw,68px); font-weight: 300; color: var(--white); line-height: 1.2; padding: 5px 0; margin-bottom: 5px; opacity: 0; }
+  .page-reception .inv-names .amp { font-style: italic; color: var(--gold); font-size: 0.5em; display: inline-block; margin: 0 8px; }
+  .page-reception .inv-divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 20px auto; opacity: 0; }
+  .page-reception .inv-message { font-family: 'Cormorant Garamond', serif; font-size: clamp(15px,3.5vw,18px); font-weight: 300; font-style: italic; color: var(--white); margin-bottom: 25px; line-height: 1.6; opacity: 0; }
+  .page-reception .inv-date { margin-bottom: 20px; opacity: 0; }
+  .page-reception .inv-date .day { font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .page-reception .inv-date .date { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px,5vw,30px); font-weight: 300; color: var(--white); margin-bottom: 6px; }
+  .page-reception .inv-date .time { font-size: 12px; font-weight: 300; letter-spacing: 3px; color: var(--gold); }
+  .page-reception .inv-venue { margin-bottom: 20px; opacity: 0; }
+  .page-reception .inv-venue .vname { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px,4vw,22px); font-weight: 400; color: var(--white); margin-bottom: 5px; }
+  .page-reception .inv-venue .vaddr { font-size: 11px; font-weight: 300; color: rgba(245,240,235,0.55); line-height: 1.8; letter-spacing: 0.5px; }
+  .page-reception .inv-dress { margin-bottom: 18px; opacity: 0; }
+  .page-reception .inv-dress .dtitle { font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .page-reception .inv-dress .dval { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 300; color: var(--white); }
+  .page-reception .inv-note { font-size: 10px; font-weight: 300; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; opacity: 0; }
+
+  /* Page 3: RSVP */
+  .page-rsvp { background: var(--bg); }
+  .rsvp-content { text-align: center; max-width: 520px; width: 100%; padding: 50px 40px; background: linear-gradient(160deg, rgba(22,20,18,0.95), rgba(16,14,12,0.98)); border: 1px solid rgba(201,169,110,0.15); border-radius: 4px; box-shadow: 0 8px 40px rgba(0,0,0,0.4); position: relative; }
+  .rsvp-content::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(201,169,110,0.07); border-radius: 2px; pointer-events: none; }
+  .rsvp-title { font-size: 11px; font-weight: 400; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; opacity: 0; }
+  .rsvp-subtitle { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; color: var(--white); margin-bottom: 35px; opacity: 0; }
+  .rsvp-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto 35px; opacity: 0; }
+  .rsvp-form { display: flex; flex-direction: column; gap: 14px; max-width: 320px; margin: 0 auto; opacity: 0; }
+  .rsvp-input { background: transparent; border: 1px solid rgba(201,169,110,0.25); border-radius: 2px; padding: 12px 16px; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 300; color: var(--white); outline: none; transition: border-color 0.3s; }
+  .rsvp-input:focus { border-color: var(--gold); }
+  .rsvp-input::placeholder { color: rgba(245,240,235,0.3); }
   .rsvp-textarea { resize: none; height: 80px; }
   .rsvp-attendance { display: flex; gap: 20px; justify-content: center; }
   .rsvp-radio { cursor: pointer; display: flex; align-items: center; gap: 8px; }
-  .rsvp-radio input[type="radio"] {
-    appearance: none; width: 14px; height: 14px;
-    border: 1px solid rgba(107,124,94,0.3); border-radius: 50%;
-    cursor: pointer; position: relative; transition: border-color 0.3s ease;
-  }
-  .rsvp-radio input[type="radio"]:checked { border-color: var(--green); }
-  .rsvp-radio input[type="radio"]:checked::after {
-    content: ''; position: absolute; inset: 3px; background: var(--green); border-radius: 50%;
-  }
-  .radio-label { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 300; color: var(--text); letter-spacing: 0.5px; }
-  .rsvp-button {
-    background: transparent; border: 1px solid var(--green); color: var(--green);
-    padding: 12px 24px; font-family: 'Montserrat', sans-serif; font-size: 11px;
-    font-weight: 400; letter-spacing: 3px; text-transform: uppercase;
-    cursor: pointer; transition: background 0.3s ease, color 0.3s ease; margin-top: 6px;
-  }
-  .rsvp-button:hover { background: var(--green); color: white; }
-  .rsvp-success {
-    display: none; font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-style: italic; color: var(--green); margin-top: 20px;
-  }
+  .rsvp-radio input[type="radio"] { appearance: none; width: 14px; height: 14px; border: 1px solid rgba(201,169,110,0.4); border-radius: 50%; cursor: pointer; position: relative; transition: border-color 0.3s; }
+  .rsvp-radio input[type="radio"]:checked { border-color: var(--gold); }
+  .rsvp-radio input[type="radio"]:checked::after { content: ''; position: absolute; inset: 3px; background: var(--gold); border-radius: 50%; }
+  .radio-label { font-size: 12px; font-weight: 300; color: var(--white); letter-spacing: 0.5px; }
+  .rsvp-button { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 24px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: background 0.3s, color 0.3s; margin-top: 6px; }
+  .rsvp-button:hover { background: var(--gold); color: var(--bg); }
+  .rsvp-success { display: none; font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--gold); margin-top: 20px; }
   .rsvp-success.show { display: block; }
 
   @media (max-width: 480px) {
-    .r-ornament { width: 45px; height: 45px; }
-    .reveal-stage { padding: 20px; }
     .rsvp-content { margin: 0 20px; padding: 40px 25px; }
+    .page-orn { width: 45px; height: 45px; }
   }
 </style>
-
-<svg width="0" height="0" style="position:absolute"><defs>
-  <filter id="wax-edge">
-    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" seed="2"/>
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</defs></svg>
+<svg width="0" height="0" style="position:absolute"><defs><filter id="wax-edge"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" seed="2"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
 </head>
 <body>
 
-<div class="petals" id="petals"></div>
+<div class="particles" id="particles"></div>
 <div class="prompt" id="prompt">Tap the seal</div>
 
 <div class="seal-scene" id="sealScene">
@@ -269,140 +192,141 @@
     <div class="seal-glow" id="sealGlow"></div>
     <div class="seal-outer"></div>
     <div class="seal-face">
+      <div class="seal-dots" id="sealDots"></div>
       <img src="../m (4).png" alt="J & R" style="width:65%;height:auto;filter:brightness(0) invert(1);z-index:3;position:relative;opacity:0.9;">
     </div>
   </div>
 </div>
 
-<div class="dissolve-dust" id="dissolveDust" style="position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden;"></div>
+<div class="dissolve-dust" id="dissolveDust"></div>
 <div class="butterflies" id="butterflies"></div>
+<div class="petals" id="petals"></div>
 
-<div class="reveal" id="reveal">
-  <div class="r-ornament tl" id="ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.4"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.25"/><circle cx="6" cy="6" r="2" fill="#6b7c5e" opacity="0.3"/></svg></div>
-  <div class="r-ornament tr" id="ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.4"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.25"/><circle cx="6" cy="6" r="2" fill="#6b7c5e" opacity="0.3"/></svg></div>
-  <div class="r-ornament bl" id="ornBL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.4"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.25"/><circle cx="6" cy="6" r="2" fill="#6b7c5e" opacity="0.3"/></svg></div>
-  <div class="r-ornament br" id="ornBR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.4"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#6b7c5e" stroke-width="0.5" opacity="0.25"/><circle cx="6" cy="6" r="2" fill="#6b7c5e" opacity="0.3"/></svg></div>
-
-  <div class="reveal-stage">
-    <div class="r-label" id="rLabel">Wedding & Reception Invitation</div>
-    <div class="r-names" id="rNames">Jigar <span class="amp">&</span> Rina</div>
-    <div class="r-divider" id="rDivider"></div>
-    <div class="r-message" id="rMessage">Your presence will make our special day even more meaningful.</div>
-    <div class="r-date" id="rDate">
-      <div class="day">Thursday</div>
-      <div class="date">4th June 2026</div>
-      <div style="display:flex;justify-content:center;gap:40px;margin-top:12px;">
-        <div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Wedding</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--text);">11:15am</div>
-        </div>
-        <div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Reception</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--text);">6:30pm</div>
-        </div>
-      </div>
-    </div>
-    <div class="r-venue" id="rVenue">
-      <div class="vname">Froyle Park</div>
-      <div class="vaddr">Ryebridge Lane<br>Upper Froyle, Alton<br>Hampshire GU34 4LA</div>
-    </div>
-    <div class="r-note" id="rNote">We kindly request no boxed gifts</div>
-  </div>
+<div class="page-dots" id="pageDots">
+  <div class="page-dot active" data-page="0"></div>
+  <div class="page-dot" data-page="1"></div>
+  <div class="page-dot" data-page="2"></div>
 </div>
 
-<div class="rsvp-overlay" id="rsvpOverlay">
-  <div class="rsvp-content">
-    <div class="rsvp-title" id="rsvpTitle">RSVP</div>
-    <div class="rsvp-subtitle" id="rsvpSub">We would love to hear from you</div>
-    <div class="rsvp-divider" id="rsvpDiv"></div>
-    <form class="rsvp-form" id="rsvpForm" onsubmit="submitRsvp(event)">
-      <input type="text" class="rsvp-input" id="rsvpName" placeholder="Your full name" required>
-      <div class="rsvp-attendance">
-        <label class="rsvp-radio"><input type="radio" name="attending" value="yes" required><span class="radio-label">Joyfully Accepts</span></label>
-        <label class="rsvp-radio"><input type="radio" name="attending" value="no"><span class="radio-label">Respectfully Declines</span></label>
+<div class="pages-container" id="pagesContainer">
+  <div class="pages-track" id="pagesTrack">
+
+    <!-- PAGE 1: Wedding (white) -->
+    <div class="page page-wedding">
+      <div class="page-texture"></div>
+      <div class="page-orn tl" id="w-ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
+      <div class="page-orn tr" id="w-ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
+      <div class="page-orn bl" id="w-ornBL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
+      <div class="page-orn br" id="w-ornBR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.35"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.5" opacity="0.2"/><circle cx="6" cy="6" r="2" fill="#c4917b" opacity="0.2"/></svg></div>
+      <div class="inv">
+        <div class="inv-label" id="w-label">Wedding Invitation</div>
+        <div class="inv-names" id="w-names">Jigar <span class="amp">&</span> Rina</div>
+        <div class="inv-divider" id="w-divider"></div>
+        <div class="inv-message" id="w-message">Your presence will make our special day even more meaningful.</div>
+        <div class="inv-date" id="w-date"><div class="day">Thursday</div><div class="date">4th June 2026</div><div class="time">Guest arrival at 11:15am</div></div>
+        <div class="inv-venue" id="w-venue"><div class="vname">Froyle Park</div><div class="vaddr">Ryebridge Lane<br>Upper Froyle, Alton<br>Hampshire GU34 4LA</div></div>
+        <div class="inv-dress" id="w-dress"><div class="dtitle">Dress Code</div><div class="dval">Indian Attire</div></div>
+        <div class="inv-note" id="w-note">We kindly request no boxed gifts</div>
       </div>
-      <input type="number" class="rsvp-input" id="rsvpGuests" placeholder="Number of guests" min="1" max="10">
-      <textarea class="rsvp-input rsvp-textarea" id="rsvpMessage" placeholder="Dietary requirements or message (optional)"></textarea>
-      <button type="submit" class="rsvp-button">Send Response</button>
-    </form>
-    <div class="rsvp-success" id="rsvpSuccess">Thank you for your response.</div>
+    </div>
+
+    <!-- PAGE 2: Reception (dark) -->
+    <div class="page page-reception">
+      <div class="page-texture"></div>
+      <div class="page-orn tl" id="r-ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+      <div class="page-orn tr" id="r-ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+      <div class="page-orn bl" id="r-ornBL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+      <div class="page-orn br" id="r-ornBR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
+      <div class="inv">
+        <div class="inv-label" id="r-label">Reception Invitation</div>
+        <div class="inv-names" id="r-names">Jigar <span class="amp">&</span> Rina</div>
+        <div class="inv-divider" id="r-divider"></div>
+        <div class="inv-message" id="r-message">Your presence will make our special day even more meaningful.</div>
+        <div class="inv-date" id="r-date"><div class="day">Thursday</div><div class="date">4th June 2026</div><div class="time">at 6:30pm</div></div>
+        <div class="inv-venue" id="r-venue"><div class="vname">Froyle Park</div><div class="vaddr">Ryebridge Lane<br>Upper Froyle, Alton<br>Hampshire GU34 4LA</div></div>
+        <div class="inv-dress" id="r-dress"><div class="dtitle">Dress Code</div><div class="dval">Men in Black &middot; Women in White</div></div>
+        <div class="inv-note" id="r-note">We kindly request no boxed gifts</div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: RSVP -->
+    <div class="page page-rsvp">
+      <div class="rsvp-content">
+        <div class="rsvp-title" id="rsvpTitle">RSVP</div>
+        <div class="rsvp-subtitle" id="rsvpSub">We would love to hear from you</div>
+        <div class="rsvp-divider" id="rsvpDiv"></div>
+        <form class="rsvp-form" id="rsvpForm" onsubmit="submitRsvp(event)">
+          <input type="text" class="rsvp-input" placeholder="Your full name" required>
+          <div class="rsvp-attendance">
+            <label class="rsvp-radio"><input type="radio" name="attending" value="yes" required><span class="radio-label">Joyfully Accepts</span></label>
+            <label class="rsvp-radio"><input type="radio" name="attending" value="no"><span class="radio-label">Respectfully Declines</span></label>
+          </div>
+          <input type="number" class="rsvp-input" placeholder="Number of guests" min="1" max="10">
+          <textarea class="rsvp-input rsvp-textarea" placeholder="Dietary requirements or message (optional)"></textarea>
+          <button type="submit" class="rsvp-button">Send Response</button>
+        </form>
+        <div class="rsvp-success" id="rsvpSuccess">Thank you for your response.</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
   document.body.classList.add('ready');
 
-  // ── Petals (floral — pinks, whites, greens) ──
-  const petalContainer = document.getElementById('petals');
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div'); p.className = 'petal';
-    const size = 8 + Math.random() * 14;
-    p.style.width = size + 'px'; p.style.height = (size * 1.4) + 'px';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.borderRadius = Math.random() > 0.5 ? '50% 50% 50% 0' : '50% 0 50% 50%';
-    const colors = [
-      'linear-gradient(135deg, rgba(196,145,123,0.3), rgba(212,168,151,0.1))',
-      'linear-gradient(135deg, rgba(143,166,122,0.25), rgba(107,124,94,0.08))',
-      'linear-gradient(135deg, rgba(230,220,210,0.3), rgba(196,145,123,0.1))',
-    ];
-    p.style.background = colors[Math.floor(Math.random() * colors.length)];
-    p.style.animation = 'petalFall ' + (8000+Math.random()*8000) + 'ms linear ' + (Math.random()*2000) + 'ms infinite';
-    petalContainer.appendChild(p);
+  // Particles
+  const pc = document.getElementById('particles');
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.animationDuration = (8+Math.random()*12)+'s';
+    p.style.animationDelay = (Math.random()*2)+'s';
+    p.style.width = p.style.height = (1.5+Math.random()*2.5)+'px';
+    pc.appendChild(p);
   }
 
-  // ── Audio ──
+  // Seal dots
+  const dots = document.getElementById('sealDots');
+  for (let i = 0; i < 24; i++) {
+    const d = document.createElement('div'); d.className = 'seal-dot';
+    const a = (i/24)*Math.PI*2;
+    d.style.left = (50+Math.cos(a)*44)+'%'; d.style.top = (50+Math.sin(a)*44)+'%';
+    d.style.transform = 'translate(-50%,-50%)'; dots.appendChild(d);
+  }
+
+  // Music
   const bgMusic = new Audio('../Lana Del Rey - Young and Beautiful (Official Instrumental) - (320 Kbps).mp3');
   bgMusic.loop = true; bgMusic.volume = 0;
   let musicStarted = false;
   function startMusic() {
-    if (musicStarted) return;
-    musicStarted = true;
-    bgMusic.play().then(() => {
-      gsap.to(bgMusic, { volume: 0.35, duration: 4, ease: 'power1.in' });
-    }).catch(() => {});
+    if (musicStarted) return; musicStarted = true;
+    bgMusic.play().then(() => { gsap.to(bgMusic, {volume:0.35, duration:4, ease:'power1.in'}); }).catch(()=>{});
   }
 
-  function submitRsvp(e) {
-    e.preventDefault();
-    document.getElementById('rsvpForm').style.display = 'none';
-    document.getElementById('rsvpSuccess').classList.add('show');
-  }
+  function submitRsvp(e) { e.preventDefault(); document.getElementById('rsvpForm').style.display='none'; document.getElementById('rsvpSuccess').classList.add('show'); }
 
-  // ── Dissolve dust ──
-  function spawnDissolveDust() {
-    const container = document.getElementById('dissolveDust');
+  // Dissolve dust
+  function spawnDust() {
+    const c = document.getElementById('dissolveDust');
     const seal = document.getElementById('seal');
-    const rect = seal.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    for (let i = 0; i < 60; i++) {
+    const r = seal.getBoundingClientRect();
+    const cx = r.left+r.width/2, cy = r.top+r.height/2;
+    for (let i=0;i<60;i++) {
       const p = document.createElement('div');
-      p.style.position = 'absolute'; p.style.borderRadius = '50%';
-      const sz = 2 + Math.random() * 4;
-      p.style.width = sz + 'px'; p.style.height = sz + 'px';
-      p.style.left = cx + 'px'; p.style.top = cy + 'px';
-      const colors = ['#a3b893', '#8fa67a', '#6b7c5e', '#c4917b'];
-      p.style.background = colors[Math.floor(Math.random() * colors.length)];
-      p.style.boxShadow = '0 0 ' + (2+Math.random()*3) + 'px rgba(107,124,94,0.3)';
-      container.appendChild(p);
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 80 + Math.random() * 250;
-      gsap.fromTo(p,
-        { x: 0, y: 0, opacity: 0, scale: 0.5 },
-        { x: Math.cos(angle)*dist, y: Math.sin(angle)*dist - Math.random()*60,
-          opacity: 0, scale: 0, duration: 1.5+Math.random()*1, delay: Math.random()*0.8,
-          ease: 'power2.out',
-          keyframes: [
-            { opacity: 0.7, scale: 1, duration: 0.2 },
-            { opacity: 0, scale: 0, duration: 1.3+Math.random()*0.7 }
-          ],
-          onComplete: function() { p.remove(); }
-        }
-      );
+      p.style.cssText = 'position:absolute;border-radius:50%;';
+      const sz = 2+Math.random()*4; p.style.width=sz+'px'; p.style.height=sz+'px';
+      p.style.left=cx+'px'; p.style.top=cy+'px';
+      const cols=['#c44040','#8c2e2e','#d4a897','#c4917b'];
+      p.style.background=cols[Math.floor(Math.random()*cols.length)];
+      p.style.boxShadow='0 0 '+(2+Math.random()*3)+'px rgba(140,46,46,0.3)';
+      c.appendChild(p);
+      const angle=Math.random()*Math.PI*2, dist=80+Math.random()*250;
+      gsap.fromTo(p,{x:0,y:0,opacity:0,scale:0.5},{x:Math.cos(angle)*dist,y:Math.sin(angle)*dist-Math.random()*60,opacity:0,scale:0,duration:1.5+Math.random(),delay:Math.random()*0.8,ease:'power2.out',keyframes:[{opacity:0.8,scale:1,duration:0.2},{opacity:0,scale:0,duration:1.3+Math.random()*0.7}],onComplete:function(){p.remove();}});
     }
   }
 
-  // ── Butterflies (rose/green tones) ──
+  // Butterflies
   function createButterflySVG(hue, opacity) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 40 40'); svg.setAttribute('fill', 'none');
@@ -433,84 +357,159 @@
       const b = document.createElement('div'); b.className = 'butterfly';
       const size = 45 + Math.random() * 35;
       b.style.width = size + 'px'; b.style.height = size + 'px';
-      const hues = ['#c4917b', '#8fa67a', '#d4a897'];
+      const hues = ['#c44040', '#c4917b', '#d4a897'];
       const hue = hues[Math.floor(Math.random()*hues.length)];
-      b.appendChild(createButterflySVG(hue, 0.2 + Math.random() * 0.15));
+      b.appendChild(createButterflySVG(hue, 0.4 + Math.random() * 0.2));
       const wL = b.querySelector('.wing-l'); const wR = b.querySelector('.wing-r');
       if (wL) wL.style.animationDuration = (0.6+Math.random()*0.5)+'s';
       if (wR) wR.style.animationDuration = (0.6+Math.random()*0.5)+'s';
       container.appendChild(b);
       const startX = Math.random() * window.innerWidth;
       const startY = window.innerHeight * (0.2 + Math.random() * 0.6);
+      const fadeDelay = 2 + Math.random() * 4;
       gsap.fromTo(b,
         { left: startX, top: startY, opacity: 0, rotation: -10 },
         { left: startX+(Math.random()-0.5)*400, top: startY-100-Math.random()*200,
           opacity: 0.8, rotation: 5, duration: 6+Math.random()*6,
           delay: 1+i*1.5+Math.random()*2, ease: 'sine.inOut',
-          onComplete: function() { gsap.to(b, {opacity:0, duration:2}); }
+          onComplete: function() { gsap.to(b, {opacity:0, duration: 1.5+Math.random()*2, delay: fadeDelay}); }
         }
       );
     }
   }
 
-  // ── GSAP TIMELINES ──
-  gsap.set('#sealHeading', { opacity: 0 });
-  gsap.set('#seal', { opacity: 0, scale: 0.5 });
-  gsap.set('#prompt', { opacity: 0 });
-  gsap.set('#sealGlow', { scale: 1, opacity: 0.6 });
-  gsap.set('#sealScene', { opacity: 1 });
+  function spawnPetals() {
+    const container = document.getElementById('petals');
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div'); p.className = 'petal';
+      const size = 10 + Math.random() * 16;
+      p.style.width = size + 'px'; p.style.height = (size*1.4) + 'px';
+      p.style.left = Math.random()*100 + '%';
+      p.style.borderRadius = Math.random() > 0.5 ? '50% 50% 50% 0' : '50% 0 50% 50%';
+      const colors = [
+        'linear-gradient(135deg, rgba(196,64,64,0.4), rgba(212,168,151,0.15))',
+        'linear-gradient(135deg, rgba(140,46,46,0.35), rgba(196,145,123,0.12))',
+        'linear-gradient(135deg, rgba(196,145,123,0.45), rgba(140,46,46,0.1))',
+        'linear-gradient(135deg, rgba(220,180,170,0.4), rgba(196,64,64,0.1))',
+      ];
+      p.style.background = colors[Math.floor(Math.random()*colors.length)];
+      p.style.animation = 'petalFall '+(7000+Math.random()*7000)+'ms linear '+(Math.random()*2000)+'ms infinite';
+      container.appendChild(p);
+    }
+  }
 
-  const introTL = gsap.timeline({ delay: 0.3 });
-  introTL
-    .to('#sealHeading', { opacity: 1, duration: 1.5, ease: 'power2.out' }, 0)
-    .to('#seal', { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.4)' }, 0.3)
-    .to('#prompt', { opacity: 0.7, duration: 1, ease: 'power1.out' }, 1.5)
-    .to('#prompt', { opacity: 0.4, duration: 1.5, ease: 'sine.inOut', repeat: -1, yoyo: true }, 2)
-    .to('#sealGlow', { scale: 1.08, opacity: 1, duration: 1.5, ease: 'sine.inOut', repeat: -1, yoyo: true }, 0.5);
+  // GSAP init
+  gsap.set('#sealHeading',{opacity:0}); gsap.set('#seal',{opacity:0,scale:0.5});
+  gsap.set('#prompt',{opacity:0}); gsap.set('#sealGlow',{scale:1,opacity:0.6}); gsap.set('#sealScene',{opacity:1});
+
+  const introTL = gsap.timeline({delay:0.3});
+  introTL.to('#sealHeading',{opacity:1,duration:1.5,ease:'power2.out'},0)
+    .to('#seal',{opacity:1,scale:1,duration:1.2,ease:'back.out(1.4)'},0.3)
+    .to('#prompt',{opacity:0.7,duration:1,ease:'power1.out'},1.5)
+    .to('#prompt',{opacity:0.4,duration:1.5,ease:'sine.inOut',repeat:-1,yoyo:true},2)
+    .to('#sealGlow',{scale:1.08,opacity:1,duration:1.5,ease:'sine.inOut',repeat:-1,yoyo:true},0.5);
+
+  // ── Page navigation ──
+  let currentPage = 0;
+  const totalPages = 3;
+  let canSwipe = false;
+  let revealDone = [false, false, false];
+
+  function goToPage(n) {
+    if (n < 0 || n >= totalPages) return;
+    currentPage = n;
+    gsap.to('#pagesTrack', { x: (-n * 100) + 'vw', duration: 1, ease: 'power3.inOut' });
+    // Update dots
+    document.querySelectorAll('.page-dot').forEach((d,i) => {
+      d.classList.toggle('active', i === n);
+    });
+    const dotsEl = document.getElementById('pageDots');
+    dotsEl.classList.toggle('on-wedding', n === 0);
+    // Trigger reveal for new page if not done
+    if (n === 1 && !revealDone[1]) { revealDone[1] = true; revealReception(); }
+    if (n === 2 && !revealDone[2]) { revealDone[2] = true; revealRSVP(); }
+  }
+
+  function revealReception() {
+    const tl = gsap.timeline();
+    tl.fromTo('#r-label',{opacity:0,y:20},{opacity:1,y:0,duration:0.8,ease:'power3.out'},0)
+      .fromTo('#r-names',{opacity:0,y:25},{opacity:1,y:0,duration:1,ease:'power3.out'},0.3)
+      .fromTo('#r-divider',{opacity:0,scaleX:0},{opacity:1,scaleX:1,duration:1,ease:'power2.out'},1)
+      .fromTo('#r-message',{opacity:0},{opacity:0.85,duration:1.4,ease:'power1.out'},1.3)
+      .fromTo('#r-date',{opacity:0,y:15},{opacity:1,y:0,duration:0.8,ease:'power3.out'},2)
+      .fromTo('#r-venue',{opacity:0,y:15},{opacity:1,y:0,duration:0.8,ease:'power3.out'},2.3)
+      .fromTo('#r-dress',{opacity:0,y:15},{opacity:1,y:0,duration:0.8,ease:'power3.out'},2.7)
+      .fromTo('#r-note',{opacity:0},{opacity:0.6,duration:1,ease:'power1.out'},3)
+      .to(['#r-ornTL','#r-ornTR','#r-ornBL','#r-ornBR'],{opacity:1,duration:1.2,ease:'power1.out'},3.3);
+  }
+
+  function revealRSVP() {
+    const tl = gsap.timeline();
+    tl.fromTo('#rsvpTitle',{opacity:0,y:20},{opacity:1,y:0,duration:0.8,ease:'power3.out'},0)
+      .fromTo('#rsvpSub',{opacity:0,y:20},{opacity:0.7,y:0,duration:0.8,ease:'power3.out'},0.2)
+      .fromTo('#rsvpDiv',{opacity:0},{opacity:1,duration:0.6,ease:'power1.out'},0.3)
+      .fromTo('#rsvpForm',{opacity:0,y:20},{opacity:1,y:0,duration:0.8,ease:'power3.out'},0.4);
+  }
+
+  // Touch swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e) {
+    if (!canSwipe) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && currentPage < totalPages - 1) goToPage(currentPage + 1);
+      else if (diff < 0 && currentPage > 0) goToPage(currentPage - 1);
+    }
+  });
+
+  // Dot clicks
+  document.querySelectorAll('.page-dot').forEach(d => {
+    d.addEventListener('click', function() { if (canSwipe) goToPage(parseInt(this.dataset.page)); });
+  });
 
   let opened = false;
   document.getElementById('seal').addEventListener('click', function() {
-    if (opened) return;
-    opened = true;
-    gsap.set('#seal', { opacity: 1, scale: 1 });
-    gsap.set('#sealHeading', { opacity: 1 });
+    if (opened) return; opened = true;
+    gsap.set('#seal',{opacity:1,scale:1}); gsap.set('#sealHeading',{opacity:1});
     introTL.pause(); introTL.kill();
 
     const tl = gsap.timeline();
-    tl.to('#sealHeading', { opacity: 0, duration: 0.8, ease: 'power2.in' }, 0)
-      .to('#prompt', { opacity: 0, duration: 0.5, ease: 'power2.in' }, 0)
-      .call(() => spawnDissolveDust(), null, 0.1)
-      .to('#sealGlow', { scale: 2, opacity: 0, duration: 1.5, ease: 'power1.out' }, 0)
-      .to('#seal', { opacity: 0, scale: 1.05, duration: 1.8, ease: 'power1.in' }, 0.3)
-      .call(() => startMusic(), null, 0.8)
-      .set('#sealScene', { display: 'none' }, 2.5)
 
-      .call(() => {
-        document.getElementById('reveal').classList.add('active');
+    // Dissolve seal
+    tl.to('#sealHeading',{opacity:0,duration:0.8,ease:'power2.in'},0)
+      .to('#prompt',{opacity:0,duration:0.5,ease:'power2.in'},0)
+      .call(()=>spawnDust(),null,0.1)
+      .to('#sealGlow',{scale:2,opacity:0,duration:1.5,ease:'power1.out'},0)
+      .to('#seal',{opacity:0,scale:1.05,duration:1.8,ease:'power1.in'},0.3)
+      .call(()=>startMusic(),null,0.8)
+      .set('#sealScene',{display:'none'},2.5)
+
+    // Show pages + dots
+      .call(()=>{
+        document.getElementById('pagesContainer').classList.add('active');
         spawnButterflies();
-      }, null, 2.3)
+        spawnPetals();
+      },null,2.3)
+      .to('#pageDots',{opacity:1,duration:0.8,ease:'power1.out'},2.5)
 
-      .set('#rLabel', { visibility: 'visible' }, 2.5)
-      .fromTo('#rLabel', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 2.5)
-      .set('#rNames', { visibility: 'visible' }, 3.3)
-      .fromTo('#rNames', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 1.4, ease: 'power3.out' }, 3.3)
-      .set('#rDivider', { visibility: 'visible' }, 4.5)
-      .fromTo('#rDivider', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1.2, ease: 'power2.out' }, 4.5)
-      .set('#rMessage', { visibility: 'visible' }, 5)
-      .fromTo('#rMessage', { opacity: 0 }, { opacity: 0.85, duration: 1.8, ease: 'power1.out' }, 5)
-      .set('#rDate', { visibility: 'visible' }, 6.2)
-      .fromTo('#rDate', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 6.2)
-      .set('#rVenue', { visibility: 'visible' }, 6.5)
-      .fromTo('#rVenue', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, 6.5)
-      .set('#rNote', { visibility: 'visible' }, 7)
-      .fromTo('#rNote', { opacity: 0 }, { opacity: 0.6, duration: 1.2, ease: 'power1.out' }, 7)
-      .to(['#ornTL','#ornTR','#ornBL','#ornBR'], { opacity: 1, duration: 1.2, ease: 'power1.out' }, 7.4)
+    // Wedding page reveal
+      .set('#w-label',{visibility:'visible'},2.5).fromTo('#w-label',{opacity:0,y:20},{opacity:1,y:0,duration:1,ease:'power3.out'},2.5)
+      .set('#w-names',{visibility:'visible'},3.3).fromTo('#w-names',{opacity:0,y:25},{opacity:1,y:0,duration:1.4,ease:'power3.out'},3.3)
+      .set('#w-divider',{visibility:'visible'},4.5).fromTo('#w-divider',{opacity:0,scaleX:0},{opacity:1,scaleX:1,duration:1.2,ease:'power2.out'},4.5)
+      .set('#w-message',{visibility:'visible'},5).fromTo('#w-message',{opacity:0},{opacity:0.85,duration:1.8,ease:'power1.out'},5)
+      .set('#w-date',{visibility:'visible'},6.2).fromTo('#w-date',{opacity:0,y:15},{opacity:1,y:0,duration:1,ease:'power3.out'},6.2)
+      .set('#w-venue',{visibility:'visible'},6.5).fromTo('#w-venue',{opacity:0,y:15},{opacity:1,y:0,duration:1,ease:'power3.out'},6.5)
+      .set('#w-dress',{visibility:'visible'},7).fromTo('#w-dress',{opacity:0,y:15},{opacity:1,y:0,duration:1,ease:'power3.out'},7)
+      .set('#w-note',{visibility:'visible'},7.4).fromTo('#w-note',{opacity:0},{opacity:0.6,duration:1.2,ease:'power1.out'},7.4)
+      .to(['#w-ornTL','#w-ornTR','#w-ornBL','#w-ornBR'],{opacity:1,duration:1.2,ease:'power1.out'},7.8)
 
-      .to('#rsvpOverlay', { x: 0, duration: 1.2, ease: 'power3.inOut' }, 15)
-      .fromTo('#rsvpTitle', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 15.4)
-      .fromTo('#rsvpSub', { opacity: 0, y: 20 }, { opacity: 0.7, y: 0, duration: 0.8, ease: 'power3.out' }, 15.6)
-      .fromTo('#rsvpDiv', { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' }, 15.7)
-      .fromTo('#rsvpForm', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 15.8);
+    // Enable swiping + auto-swipe to reception (faster — 10s instead of 14)
+      .call(()=>{ canSwipe = true; revealDone[0] = true; },null,8.5)
+      .call(()=>{ goToPage(1); },null,10)
+
+    // Auto-swipe to RSVP after reception reveals
+      .call(()=>{ goToPage(2); },null,18);
   });
 </script>
 </body>
