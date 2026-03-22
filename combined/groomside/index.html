@@ -100,6 +100,23 @@
   .page-dots.on-wedding .page-dot { background: rgba(140,46,46,0.2); }
   .page-dots.on-wedding .page-dot.active { background: var(--green); }
 
+  /* ── Swipe hint ── */
+  .swipe-hint {
+    position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    z-index: 201; opacity: 0; pointer-events: none;
+  }
+  .swipe-hint span {
+    font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 300;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--green); opacity: 0.6;
+  }
+  .swipe-arrow {
+    width: 20px; height: 20px;
+    border-right: 1.5px solid var(--green);
+    border-bottom: 1.5px solid var(--green);
+    transform: rotate(-45deg); opacity: 0.5;
+  }
+
   .page { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 
   .page-vignette {
@@ -214,6 +231,11 @@
 <div class="dissolve-dust" id="dissolveDust"></div>
 <div class="butterflies" id="butterflies"></div>
 <div class="petals" id="petals"></div>
+
+<div class="swipe-hint" id="swipeHint">
+  <span>Swipe</span>
+  <div class="swipe-arrow"></div>
+</div>
 
 <div class="page-dots" id="pageDots">
   <div class="page-dot active" data-page="0"></div>
@@ -446,14 +468,7 @@
     });
     const dotsEl = document.getElementById('pageDots');
     dotsEl.classList.toggle('on-wedding', n === 0);
-    // Hide butterflies/petals on RSVP page, show on invitation pages
-    if (n === 2) {
-      gsap.to('#butterflies', { opacity: 0, duration: 0.5 });
-      gsap.to('#petals', { opacity: 0, duration: 0.5 });
-    } else {
-      gsap.to('#butterflies', { opacity: 1, duration: 0.5 });
-      gsap.to('#petals', { opacity: 1, duration: 0.5 });
-    }
+    // Particles stay visible throughout — RSVP overlay covers them naturally
     // Trigger reveal for new page if not done
     if (n === 1 && !revealDone[1]) { revealDone[1] = true; revealReception(); }
     if (n === 2 && !revealDone[2]) { revealDone[2] = true; revealRSVP(); }
@@ -533,12 +548,18 @@
       .set('#w-note',{visibility:'visible'},7.4).fromTo('#w-note',{opacity:0},{opacity:0.6,duration:1.2,ease:'power1.out'},7.4)
       .to(['#w-ornTL','#w-ornTR','#w-ornBL','#w-ornBR'],{opacity:1,duration:1.2,ease:'power1.out'},7.8)
 
-    // Enable swiping + auto-swipe to reception (faster — 10s instead of 14)
+    // Show swipe hint + enable swiping
+      .to('#pageDots',{opacity:1,duration:0.8,ease:'power1.out'},8)
+      .to('#swipeHint',{opacity:1,duration:0.8,ease:'power1.out'},8)
+      .to('.swipe-arrow',{x:8,duration:0.6,ease:'sine.inOut',repeat:3,yoyo:true},8.5)
+      .to('#swipeHint',{opacity:0,duration:1,ease:'power1.in'},11)
       .call(()=>{ canSwipe = true; revealDone[0] = true; },null,8.5)
-      .call(()=>{ goToPage(1); },null,10)
+
+    // Auto-swipe to reception
+      .call(()=>{ goToPage(1); },null,12)
 
     // Auto-swipe to RSVP after reception reveals
-      .call(()=>{ goToPage(2); },null,18);
+      .call(()=>{ goToPage(2); },null,20);
   });
 </script>
 </body>

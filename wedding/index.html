@@ -224,6 +224,23 @@
   .r-ornament.bl { bottom: 15px; left: 15px; transform: scaleY(-1); }
   .r-ornament.br { bottom: 15px; right: 15px; transform: scale(-1,-1); }
 
+  /* ── Swipe hint ── */
+  .swipe-hint {
+    position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    z-index: 201; opacity: 0; pointer-events: none;
+  }
+  .swipe-hint span {
+    font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 300;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--green); opacity: 0.6;
+  }
+  .swipe-arrow {
+    width: 20px; height: 20px;
+    border-right: 1.5px solid var(--green);
+    border-bottom: 1.5px solid var(--green);
+    transform: rotate(-45deg); opacity: 0.5;
+  }
+
   /* ── Page dots ── */
   .page-dots {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
@@ -344,6 +361,11 @@
 
 <div class="dissolve-dust" id="dissolveDust" style="position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden;"></div>
 <div class="butterflies" id="butterflies"></div>
+
+<div class="swipe-hint" id="swipeHint">
+  <span>Swipe</span>
+  <div class="swipe-arrow"></div>
+</div>
 
 <div class="page-dots" id="pageDots">
   <div class="page-dot active" data-page="0"></div>
@@ -623,12 +645,15 @@
 
       .to('#lightRays', { opacity: 0, duration: 3, ease: 'power1.in' }, 9)
 
-      // Show dots + enable swipe
+      // Show dots + swipe hint + enable swipe
       .to('#pageDots', { opacity: 1, duration: 0.8, ease: 'power1.out' }, 8)
+      .to('#swipeHint', { opacity: 1, duration: 0.8, ease: 'power1.out' }, 8)
+      .to('.swipe-arrow', { x: 8, duration: 0.6, ease: 'sine.inOut', repeat: 3, yoyo: true }, 8.5)
+      .to('#swipeHint', { opacity: 0, duration: 1, ease: 'power1.in' }, 11)
       .call(() => { canSwipe = true; }, null, 8.5)
 
-      // Auto-swipe to RSVP after 10s
-      .call(() => { goToPage(1); }, null, 10);
+      // Auto-swipe to RSVP after 12s
+      .call(() => { goToPage(1); }, null, 12);
   });
 
   // ── Page navigation ──
@@ -641,10 +666,8 @@
     currentPage = n;
     if (n === 0) {
       gsap.to('#rsvpOverlay', { x: '100%', duration: 1, ease: 'power3.inOut' });
-      gsap.to('#butterflies', { opacity: 1, duration: 0.5 });
     } else {
       gsap.to('#rsvpOverlay', { x: 0, duration: 1, ease: 'power3.inOut' });
-      gsap.to('#butterflies', { opacity: 0, duration: 0.5 });
       if (!rsvpRevealed) {
         rsvpRevealed = true;
         gsap.fromTo('#rsvpTitle', {opacity:0,y:20}, {opacity:1,y:0,duration:0.8,ease:'power3.out',delay:0.3});
