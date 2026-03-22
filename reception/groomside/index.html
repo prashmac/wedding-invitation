@@ -117,7 +117,7 @@
   .dust { position: absolute; border-radius: 50%; pointer-events: none; z-index: 10; }
 
   /* ── BUTTERFLIES ── */
-  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 55; overflow: hidden; }
+  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 56; overflow: hidden; }
   .butterfly { position: absolute; opacity: 0; }
   .butterfly svg { width: 100%; height: 100%; }
   .butterfly .wing-l { transform-origin: center right; animation: wingFlap 0.8s ease-in-out infinite alternate; }
@@ -134,8 +134,8 @@
   }
   @keyframes petalFall {
     0%   { opacity: 0; transform: translateY(-20px) rotate(0deg) scale(0.5); }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.2; }
+    10%  { opacity: 0.5; }
+    90%  { opacity: 0.15; }
     100% { opacity: 0; transform: translateY(calc(100vh + 20px)) rotate(360deg) scale(0.8); }
   }
 
@@ -433,6 +433,10 @@
   let musicStarted = false;
   const bgMusic = new Audio('../../Lana Del Rey - Young and Beautiful (Official Instrumental) - (320 Kbps).mp3');
   bgMusic.loop = true; bgMusic.volume = 0;
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) bgMusic.pause();
+    else if (musicStarted) bgMusic.play().catch(function(){});
+  });
 
   function startMusic() {
     if (musicStarted) return;
@@ -504,7 +508,7 @@
 
   function spawnPetals() {
     const container = document.getElementById('petals');
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 25; i++) {
       const p = document.createElement('div'); p.className = 'petal';
       const size = 8 + Math.random() * 10;
       p.style.width = size + 'px'; p.style.height = (size*1.4) + 'px';
