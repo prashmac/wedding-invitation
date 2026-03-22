@@ -33,11 +33,7 @@
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
     pointer-events: none; z-index: 0;
   }
-  body::after {
-    content: ''; position: fixed; inset: 0;
-    background: radial-gradient(ellipse at center, transparent 30%, rgba(140,46,46,0.08) 70%, rgba(80,20,20,0.15) 100%);
-    pointer-events: none; z-index: 52;
-  }
+  /* Vignette is per-page, not global — see .page-vignette */
 
   /* Particles */
   .particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
@@ -105,6 +101,17 @@
   .page-dots.on-wedding .page-dot.active { background: var(--green); }
 
   .page { width: 100vw; height: 100vh; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+
+  .page-vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    z-index: 1;
+  }
+  .page-vignette.wedding-vignette {
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(140,46,46,0.08) 70%, rgba(80,20,20,0.15) 100%);
+  }
+  .page-vignette.reception-vignette {
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.25) 100%);
+  }
 
   /* Page ornaments */
   .page-orn { position: absolute; width: 70px; height: 70px; opacity: 0; pointer-events: none; }
@@ -219,6 +226,7 @@
 
     <!-- PAGE 1: Wedding (white) -->
     <div class="page page-wedding">
+      <div class="page-vignette wedding-vignette"></div>
       <div class="page-texture"></div>
       <div class="page-orn tl" id="w-ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="1" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.8" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#8c2e2e" opacity="0.4"/></svg></div>
       <div class="page-orn tr" id="w-ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#8c2e2e" stroke-width="1" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#8c2e2e" stroke-width="0.8" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#8c2e2e" opacity="0.4"/></svg></div>
@@ -238,6 +246,7 @@
 
     <!-- PAGE 2: Reception (dark) -->
     <div class="page page-reception">
+      <div class="page-vignette reception-vignette"></div>
       <div class="page-texture"></div>
       <div class="page-orn tl" id="r-ornTL"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
       <div class="page-orn tr" id="r-ornTR"><svg viewBox="0 0 80 80" fill="none"><path d="M2 78 C2 40, 10 20, 78 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.6"/><path d="M2 60 C2 30, 15 15, 60 2" stroke="#c9a96e" stroke-width="0.5" opacity="0.4"/><circle cx="6" cy="6" r="2" fill="#c9a96e" opacity="0.5"/></svg></div>
