@@ -58,7 +58,7 @@
   .dissolve-dust { position: fixed; inset: 0; pointer-events: none; z-index: 44; overflow: hidden; }
 
   /* Butterflies */
-  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 45; overflow: hidden; }
+  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 51; overflow: hidden; }
   .butterfly { position: absolute; opacity: 0; }
   .butterfly svg { width: 100%; height: 100%; }
   .butterfly .wing-l { transform-origin: center right; animation: wingFlap 0.8s ease-in-out infinite alternate; }
@@ -67,7 +67,7 @@
   @keyframes wingFlapR { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(-55deg); } }
 
   /* Petals */
-  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 43; overflow: hidden; }
+  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 51; overflow: hidden; }
   .particles { overflow: hidden; }
   .petal { position: absolute; opacity: 0; border-radius: 50% 50% 50% 0; }
   @keyframes petalFall {
@@ -316,7 +316,7 @@
 
   // Particles
   const pc = document.getElementById('particles');
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 50; i++) {
     const p = document.createElement('div'); p.className = 'particle';
     p.style.left = Math.random()*100+'%';
     p.style.animationDuration = (8+Math.random()*12)+'s';
