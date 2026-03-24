@@ -43,7 +43,7 @@
   body::after {
     content: ''; position: fixed; inset: 0;
     background: radial-gradient(ellipse at center, transparent 30%, rgba(140,46,46,0.08) 70%, rgba(80,20,20,0.15) 100%);
-    pointer-events: none; z-index: 52;
+    pointer-events: none; z-index: 1;
   }
 
   /* ── Floating particles (going up) ── */
@@ -146,7 +146,7 @@
   .dust { position: absolute; border-radius: 50%; pointer-events: none; z-index: 10; }
 
   /* ── Butterflies ── */
-  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 56; overflow: hidden; }
+  .butterflies { position: fixed; inset: 0; pointer-events: none; z-index: 45; overflow: hidden; }
   .butterfly { position: absolute; opacity: 0; }
   .butterfly svg { width: 100%; height: 100%; }
   .butterfly .wing-l { transform-origin: center right; animation: wingFlap 0.8s ease-in-out infinite alternate; }
@@ -359,7 +359,7 @@
   </div>
 </div>
 
-<div class="dissolve-dust" id="dissolveDust" style="position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden;"></div>
+<div class="dissolve-dust" id="dissolveDust" style="position:fixed;inset:0;pointer-events:none;z-index:44;overflow:hidden;"></div>
 <div class="butterflies" id="butterflies"></div>
 
 <div class="swipe-hint" id="swipeHint">
