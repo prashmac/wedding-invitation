@@ -496,7 +496,28 @@
 
   function submitRsvp(e) {
     e.preventDefault();
-    document.getElementById('rsvpForm').style.display = 'none';
+    var form = document.getElementById('rsvpForm');
+    var name = form.querySelector('input[type="text"]').value;
+    var attending = form.querySelector('input[name="attending"]:checked');
+    var guests = form.querySelector('input[type="number"]').value;
+    var path = window.location.pathname;
+    var side = path.indexOf('groomside') > -1 ? 'groomside' : path.indexOf('brideside') > -1 ? 'brideside' : 'direct';
+    var page = 'wedding';
+
+    fetch('https://script.google.com/macros/s/AKfycbwOPfTbG_U-Gu8DC5x458I3GA8u6q0vLqsgvCxIn_ixgexs4EMfLzCvEy4uNwy2omk6/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        attending: attending ? attending.value : '',
+        guests: guests || '0',
+        side: side,
+        page: page
+      })
+    });
+
+    form.style.display = 'none';
     document.getElementById('rsvpSuccess').classList.add('show');
   }
 
